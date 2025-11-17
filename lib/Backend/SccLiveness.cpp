@@ -836,7 +836,9 @@ SCCLiveness::FoldIndir(IR::Instr *instr, IR::Opnd *opnd)
             return false;
         }
         constValue = static_cast<uint8 *>(base->m_sym->GetConstAddress());
-        if (indir->GetOffset() < 0 ? constValue + indir->GetOffset() > constValue : constValue + indir->GetOffset() < constValue)
+        int32 offset = indir->GetOffset();
+        if (offset < 0 ? static_cast<size_t>(-offset) > reinterpret_cast<size_t>(constValue) : 
+            static_cast<size_t>(offset) > (reinterpret_cast<size_t>(constValue) - 1))
         {
             return false;
         }
