@@ -2497,7 +2497,7 @@ void * MAPMapPEFile(HANDLE hFile)
 
         // Validate the section header
         if (   (sectionBase < loadedBase)                                                           // Did computing the section base overflow?
-            || ((char*)sectionBase + currentHeader.SizeOfRawData < (char*)sectionBase)              // Does the section overflow?
+            || (currentHeader.SizeOfRawData > (size_t)((char*)loadedBase + virtualSize - (char*)sectionBase)) // Does the section overflow?
             || ((char*)sectionBase + currentHeader.SizeOfRawData > (char*)loadedBase + virtualSize) // Does the section extend past the end of the image as the header stated?
             || ((char*)prevSectionBase + prevSectionSizeInMemory > sectionBase)                     // Does this section overlap the previous one?
             )
